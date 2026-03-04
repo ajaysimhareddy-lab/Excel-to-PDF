@@ -1,0 +1,23 @@
+import pikepdf
+import os
+
+pdf_path = input("Enter PDF file path: ").strip()
+password = input("Enter PDF password: ").strip()
+
+if not os.path.exists(pdf_path):
+    print("❌ File not found")
+    exit()
+
+# Output file in same folder
+folder = os.path.dirname(pdf_path)
+filename = os.path.splitext(os.path.basename(pdf_path))[0]
+output_path = os.path.join(folder, filename + "_decrypted.pdf")
+
+try:
+    with pikepdf.open(pdf_path, password=password) as pdf:
+        pdf.save(output_path)
+    print("✅ PDF decrypted successfully!")
+    print("📄 Saved at:", output_path)
+
+except pikepdf._qpdf.PasswordError:
+    print("❌ Incorrect password")
